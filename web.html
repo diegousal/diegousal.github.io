@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DirtyDuties - Organización del Hogar</title>
+    <link rel="stylesheet" href="styleWeb.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Big+Shoulders+Stencil:opsz,wght@10..72,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        let tareas = [];
+        let personas = [];
+    
+        function agregarTarea() {
+            const tareaInput = document.getElementById('nuevaTarea');
+            if (tareaInput.value.trim() !== '') {
+                tareas.push(tareaInput.value);
+                tareaInput.value = '';
+                actualizarLista();
+            }
+        }
+    
+        function agregarPersona() {
+            const personaInput = document.getElementById('nuevaPersona');
+            if (personaInput.value.trim() !== '') {
+                personas.push(personaInput.value);
+                personaInput.value = '';
+                actualizarListaPersonas();
+            }
+        }
+    
+        function asignarTareas() {
+            if (tareas.length === 0 || personas.length === 0) {
+                alert('Agrega tareas y personas antes de asignar.');
+                return;
+            }
+            
+            let asignaciones = {};
+            let tareasTemp = [...tareas];
+            let personasTemp = [...personas];
+    
+            let tareasPorDia = {}; // Objeto para almacenar tareas asignadas por día
+    
+            let fecha = new Date();
+            let diasEnMes = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0).getDate();
+    
+            while (tareasTemp.length > 0) {
+                for (let dia = 1; dia <= diasEnMes; dia++) {
+                    if (tareasTemp.length === 0) break;
+                    let persona = personasTemp[Math.floor(Math.random() * personasTemp.length)];
+                    let tareaIndex = Math.floor(Math.random() * tareasTemp.length);
+                    let tarea = tareasTemp.splice(tareaIndex, 1)[0];
+    
+                    if (!tareasPorDia[dia]) tareasPorDia[dia] = [];
+                    tareasPorDia[dia].push(`${persona} - ${tarea}`);
+                }
+            }
+    
+            // Guardar en localStorage para que el calendario lo lea
+            localStorage.setItem("tareasAsignadas", JSON.stringify(tareasPorDia));
+    
+            // Redirigir a la página del calendario
+            window.location.href = "calendario.html";
+        }
+    
+        function actualizarLista() {
+            const lista = document.getElementById('listaTareas');
+            lista.innerHTML = tareas.map(t => `<li>${t}</li>`).join('');
+        }
+    
+        function actualizarListaPersonas() {
+            const lista = document.getElementById('listaPersonas');
+            lista.innerHTML = personas.map(p => `<li>${p}</li>`).join('');
+        }
+
+        document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const activeInput = document.activeElement;  // Detecta el input activo
+            const form = activeInput.closest('.input-section');  // Encuentra la sección más cercana
+            const boton = form ? form.querySelector('button') : null;
+            if (boton) boton.click();
+        }
+    });
+    </script>
+</head>
+<body>
+    <img src="logo2.png" alt="Logo" class="logo">
+    <header>
+        <h1>DirtyDuties</h1>
+        <p>Reparte, organiza y olvídate del drama</p>
+    </header>
+    
+    <main>
+        <section class="input-section">
+            <h2>Añadir Tareas</h2>
+            <input type="text" id="nuevaTarea" placeholder="Escribe una tarea...">
+            <button onclick="agregarTarea()">Añadir Tarea</button>
+            <ul id="listaTareas"></ul>
+        </section>
+
+        <section class="input-section">
+            <h2>Añadir Personas</h2>
+            <input type="text" id="nuevaPersona" placeholder="Nombre de la persona...">
+            <button onclick="agregarPersona()">Añadir Persona</button>
+            <ul id="listaPersonas"></ul>
+        </section>
+        
+        <section class="assignment">
+            <h2>Asignar Tareas</h2>
+            <button onclick="asignarTareas()">Asignar Aleatoriamente</button>
+            <div id="resultado"></div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 DirtyDuties - Reparte, organiza y olvídate del drama</p>
+    </footer>
+</body>
+</html>

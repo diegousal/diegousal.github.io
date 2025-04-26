@@ -1,1 +1,67 @@
-Hello World
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DirtyDuties - Inicio</title>
+    <link rel="stylesheet" href="styleWeb.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Big+Shoulders+Stencil:opsz,wght@10..72,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styleIndex.css">
+</head>
+<body>
+    <img src="logo2.png" alt="Logo" class="logo">
+    <div class="portada">
+        <header>
+        <h1>Bienvenido a DirtyDuties</h1>
+        <p>Reparte, organiza y olvídate del drama</p>
+        </header>
+        <div class="botones">
+            <button onclick="mostrarFormulario('login')">Iniciar Sesión</button>
+            <button onclick="mostrarFormulario('registro')">Registrarse</button>
+        </div>
+    </div>
+    
+    <div id="formulario-login" class="formulario oculto">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" placeholder="Usuario" id="usuario-login">
+        <input type="password" placeholder="Contraseña" id="password-login">
+        <button onclick="iniciarSesion()">Entrar</button>
+    </div>
+    
+    <div id="formulario-registro" class="formulario oculto">
+        <h2>Registrarse</h2>
+        <input type="text" placeholder="Usuario" id="usuario-registro">
+        <input type="password" placeholder="Contraseña" id="password-registro">
+        <button onclick="registrarUsuario()">Registrarse</button>
+    </div>
+    
+    <script>
+        function mostrarFormulario(tipo) {
+            document.getElementById('formulario-login').classList.add('oculto');
+            document.getElementById('formulario-registro').classList.add('oculto');
+            document.getElementById(`formulario-${tipo}`).classList.remove('oculto');
+        }
+
+        function iniciarSesion() {
+            window.location.href="web.html"
+        }
+
+        function registrarUsuario() {
+            window.location.href="formulario.html"
+        }
+
+        document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const activeInput = document.activeElement;  // Detecta el input activo
+            const form = activeInput.closest('.input-section');  // Encuentra la sección más cercana
+            const boton = form ? form.querySelector('button') : null;
+            if (boton) boton.click();
+        }
+        });
+    </script>
+     <footer>
+        <p>&copy; 2025 DirtyDuties - Reparte, organiza y olvídate del drama</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,149 @@
+/* Estilo general del body */
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+    text-align: center;
+    background-color: #314550; /* Fondo oscuro */
+    color: #F2F2F2; /* Texto claro */
+    margin: 0;
+    padding: 20px;
+    animation: movimiento 1s ease-in forwards;
+}
+
+/* Animación de entrada */
+@keyframes movimiento {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo del título */
+h1 {
+    color: #F2F2F2;
+    font-size: 50px;
+    font-family: 'Bebas Neue', sans-serif;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Sombra elegante */
+    margin: 0 0 20px 0;
+}
+
+/* Botón */
+button {
+    background: #344F59;
+    color: #62D9CD;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #5ABFBF;
+}
+
+/* Calendario */
+.calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Estilo de cada semana */
+.evento {
+    background-color: #314550;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/* Estilo de cada día */
+.dia {
+    background: #62D9CD;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    color: #203140;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Zoom al hacer hover */
+.dia:hover {
+    transform: scale(1.7); /* Aumenta el tamaño */
+    z-index: 10;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Efecto de sombra para destacar */
+    background: #5ABFBF; /* Color de fondo para destacar el día */
+}
+
+
+
+/* Estilo de listas si las hay */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    font-size: 18px;
+    padding: 10px;
+}
+
+/* Inputs y selects */
+input, select {
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    height: 40px;
+    margin: 10px auto;
+    border: 1px solid #62D9CD;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #F2F2F2;
+    color: #203140;
+}
+
+/* Centrar formularios dentro de secciones */
+.input-section form,
+.assignment form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Secciones de contenido como formularios o bloques */
+.input-section, .assignment {
+    margin: 20px;
+    padding: 20px;
+    background: #5ABFBF;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #203140;
+}
+
+/* Footer */
+footer {
+    background: #344F59;
+    color: #F2F2F2;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+/* Logo centrado al fondo */
+.logo {
+    width: 200px;
+    height: auto;
+    margin-top: 0px;
+}
+

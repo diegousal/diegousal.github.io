@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Tareas</title>
+    <link rel="stylesheet" href="styleCalendario.css">
+    <link rel="stylesheet" href="styleWeb.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Big+Shoulders+Stencil:opsz,wght@10..72,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <img src="logo2.png" alt="Logo" class="logo">
+    <h1>Asignación de Tareas</h1>
+    <div class="calendario" id="calendario"></div>
+    <script>
+        function generarCalendario() {
+            const calendario = document.getElementById("calendario");
+            calendario.innerHTML = "";
+    
+            const fecha = new Date();
+            fecha.setDate(1);
+            const primerDia = fecha.getDay();
+            const diasEnMes = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0).getDate();
+    
+            const tareasAsignadas = JSON.parse(localStorage.getItem("tareasAsignadas")) || {};
+            const tareasPorDia = {};
+    
+            const personas = new Set();
+            for (let tipo in tareasAsignadas) {
+                tareasAsignadas[tipo].forEach(persona => personas.add(persona));
+            }
+            const personasArray = Array.from(personas);
+    
+            // 🔁 Dividir en semanas
+            for (let semanaInicio = 1; semanaInicio <= diasEnMes; semanaInicio += 7) {
+                const semanaFin = Math.min(semanaInicio + 6, diasEnMes);
+    
+                // Barajar personas por semana para rotar tareas
+                const personasShuffle = [...personasArray].sort(() => Math.random() - 0.5);
+    
+                let i = 0;
+                for (let tipoTarea in tareasAsignadas) {
+                    // Elegir aleatoriamente una persona distinta para esta tarea esta semana
+                    const persona = personasShuffle[i % personasShuffle.length];
+                    i++;
+    
+                    // Repartir esa tarea a esa persona dentro de la semana (cada 2-3 días)
+                    let dia = semanaInicio + Math.floor(Math.random() * 2); // empieza entre día 1 y 3 de la semana
+                    while (dia <= semanaFin) {
+                        if (!tareasPorDia[dia]) tareasPorDia[dia] = [];
+                        tareasPorDia[dia].push(`${persona}`);
+                        dia += Math.floor(Math.random() * 2) + 2; // cada 2-3 días
+                        
+                    }
+                }
+            }
+    
+            // 🔳 Generar la vista del calendario
+            for (let i = 0; i < primerDia; i++) {
+                const diaVacio = document.createElement("div");
+                diaVacio.classList.add("dia");
+                calendario.appendChild(diaVacio);
+            }
+    
+            for (let dia = 1; dia <= diasEnMes; dia++) {
+                const diaDiv = document.createElement("div");
+                diaDiv.classList.add("dia");
+                diaDiv.innerHTML = `<strong>${dia}</strong>`;
+    
+                if (tareasPorDia[dia]) {
+                    tareasPorDia[dia].forEach(tarea => {
+                        const evento = document.createElement("div");
+                        evento.classList.add("evento");
+                        evento.textContent = tarea;
+                        diaDiv.appendChild(evento);
+                    });
+                }
+    
+                calendario.appendChild(diaDiv);
+            }
+        }
+    
+        generarCalendario();
+
+        document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const activeInput = document.activeElement;  // Detecta el input activo
+            const form = activeInput.closest('.input-section');  // Encuentra la sección más cercana
+            const boton = form ? form.querySelector('button') : null;
+            if (boton) boton.click();
+        }
+        });
+    </script>
+    
+    <footer>
+        <p>&copy; 2025 DirtyDuties - Reparte, organiza y olvídate del drama</p>
+    </footer>
+</body>
+</html>
