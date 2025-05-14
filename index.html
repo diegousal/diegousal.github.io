@@ -86,22 +86,25 @@
 
     .btn-nav {
       background: #7ff2ec;
-      padding: 0.5rem 1rem;
-      border: 1px solid #444;
-      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
       text-decoration: none;
-      color: black;
-      font-weight: 500;
+      color: #000000;
+      font-weight: 600;
+      font-size: 1rem;
       transition: background 0.2s ease;
+      cursor: pointer;
+      text-transform: uppercase;
     }
 
     .btn-nav:hover {
-      background: #6ad9d3;
+      background: #5ab8b2;
     }
 
     .hero {
       text-align: center;
-      padding: 7rem 2rem 4rem;
+      padding: 9rem 2rem 4rem;
       background: #efefef;
     }
 
@@ -139,19 +142,21 @@
     .hero-btn {
       display: inline-block;
       background: #7ff2ec;
-      padding: 0.8rem 1.5rem;
-      border: 1px solid #344f59;
-      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
       text-decoration: none;
-      color: black;
-      font-weight: 500;
+      color: #000000;
+      font-weight: 600;
       font-size: 1rem;
       transition: background 0.2s ease;
       margin-top: 1rem;
+      cursor: pointer;
+      text-transform: uppercase;
     }
 
     .hero-btn:hover {
-      background: #6ad9d3;
+      background: #5ab8b2;
     }
 
     .content {
@@ -197,16 +202,17 @@
     }
 
     .feature-card {
-      background: #7ff2ec;
+      background: #6ad9d3;
       padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
     .feature-card:hover {
-      transform: scale(1.05);
+      transform: scale(1.2);
+      background: #5ab8b2;
     }
 
     .feature-card h3 {
@@ -233,7 +239,7 @@
     .contact-form textarea {
       padding: 0.8rem;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 1rem;
       width: 100%;
     }
@@ -245,18 +251,35 @@
 
     .contact-form button {
       background: #7ff2ec;
-      padding: 0.8rem;
-      border: 1px solid #444;
-      border-radius: 8px;
-      color: black;
-      font-weight: 500;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 4px;
+      color: #000000;
+      font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
       transition: background 0.2s ease;
+      text-transform: uppercase;
     }
 
     .contact-form button:hover {
-      background: #6ad9d3;
+      background: #5ab8b2;
+    }
+
+    .confirmation-message {
+      display: none;
+      text-align: center;
+      margin-top: 1rem;
+      padding: 0.8rem;
+      background: #e0f7fa;
+      border-radius: 4px;
+      color: #344f59;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .confirmation-message.visible {
+      display: block;
     }
 
     .contact-info {
@@ -338,7 +361,7 @@
       }
 
       .hero {
-        padding: 5rem 1rem 3rem;
+        padding: 7rem 1rem 3rem;
       }
 
       .content {
@@ -434,8 +457,15 @@
           <h3>Colaboración en Tiempo Real</h3>
           <p>Comparte casas con otros usuarios y trabaja juntos para mantener todo limpio y organizado.</p>
         </div>
+        <div class="feature-card">
+          <h3>Historial de Tareas</h3>
+          <p>Consulta el historial de tareas completadas para llevar un registro de las responsabilidades cumplidas.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Personalización</h3>
+          <p>Adapta la aplicación a tus necesidades con opciones de personalización para tareas y casas.</p>
+        </div>
       </div>
-      <p><strong>Ventajas:</strong> DirtyDuties reduce el estrés de coordinar tareas, fomenta la responsabilidad compartida y elimina discusiones sobre quién hace qué. Su diseño simple y accesible lo hace ideal para usuarios de todas las edades.</p>
     </section>
 
     <section id="acerca-de" class="content">
@@ -459,8 +489,11 @@
         <textarea placeholder="Tu mensaje" required></textarea>
         <button type="submit">Enviar</button>
       </form>
+      <div class="confirmation-message" id="confirmationMessage">
+        Correo enviado con éxito
+      </div>
       <div class="contact-info">
-        <p>Correo: <a href="mailto:soporte@dirtyduties.com">soporte@dirtyduties.com</a></p>
+        <p>Correo: <a href="/cdn-cgi/l/email-protection#c6b5a9b6a9b4b2a386a2afb4b2bfa2b3b2afa3b5e8a5a9ab"><span class="__cf_email__" data-cfemail="ecdfc3dcc3ded8c9ecc8c5ded8d5c8d9d8c5c9df82cfc3c1">[email&#160;protected]</span></a></p>
         <p>Síguenos en: 📱 📘 📸 📹</p>
       </div>
     </section>
@@ -479,6 +512,7 @@
     <p class="copyright">© 2025 DirtyDuties - Todos los derechos reservados</p>
   </footer>
 
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script>
     // Actualizar enlace activo según la sección visible
     const navLinks = document.querySelectorAll('.navbar nav a');
@@ -518,6 +552,21 @@
         });
       });
     });
+
+    // Manejar el envío del formulario de contacto
+    const contactForm = document.querySelector('.contact-form');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      confirmationMessage.classList.add('visible');
+      contactForm.reset();
+
+      setTimeout(() => {
+        confirmationMessage.classList.remove('visible');
+      }, 3000);
+    });
   </script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d18bd0baad6789',t:'MTc0Njc5NzM3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
