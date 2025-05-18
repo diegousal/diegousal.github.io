@@ -57,7 +57,7 @@
         <div class="card">
           <h2>Tareas de Mi Casa</h2>
           <ul class="task-list" id="task-list"></ul>
-          <div class="add-form">
+          <div class="add-form" style="display: none;">
             <input type="text" id="new-house-task" placeholder="Escribe una tarea..." />
             <select id="task-assignee" class="task-assignee-select">
               <option value="">Seleccionar persona</option>
@@ -71,7 +71,7 @@
         <div class="card">
           <h2>Personas</h2>
           <ul class="person-list" id="person-list"></ul>
-          <div class="add-form">
+          <div class="add-form" style="display: none;">
             <input type="text" id="new-person" placeholder="Nombre de la persona..." />
             <button onclick="addPerson()">Añadir Persona</button>
             <button onclick="saveEditedPerson()" id="save-person-btn" style="display: none;">Guardar Cambios</button>
@@ -132,7 +132,7 @@
       <div class="card">
         <h2>Mis Tareas</h2>
         <ul class="user-task-list" id="user-task-list"></ul>
-        <div class="add-form">
+        <div class="add-form" style="display: none;">
           <input type="text" id="new-task" placeholder="Escribe una tarea..." />
           <button onclick="addTask()">Añadir Tarea</button>
         </div>
@@ -216,20 +216,20 @@
         <div class="modal-section">
           <h3>Tareas</h3>
           <ul class="modal-task-list" id="modal-task-list"></ul>
-          <div class="add-form">
+          <div class="add-form" style="display: none;">
             <input type="text" id="modal-new-task" placeholder="Escribe una tarea..." />
             <select id="modal-task-assignee" class="task-assignee-select">
               <option value="">Seleccionar persona</option>
             </select>
             <button onclick="addModalTask()">Añadir Tarea</button>
-            <button onclick="saveModalEditedTask()" id="modal-save-task-btn" style="display: none;">Guardar Cambios</button>
+            <button onclick="saveModalEditedUserTask()" id="modal-save-task-btn" style="display: none;">Guardar Cambios</button>
             <button onclick="cancelModalEditTask()" id="modal-cancel-task-btn" style="display: none;">Cancelar</button>
           </div>
         </div>
         <div class="modal-section">
           <h3>Personas</h3>
           <ul class="modal-person-list" id="modal-person-list"></ul>
-          <div class="add-form">
+          <div class="add-form" style="display: none;">
             <input type="text" id="modal-new-person" placeholder="Nombre de la persona..." />
             <button onclick="addModalPerson()">Añadir Persona</button>
             <button onclick="saveModalEditedPerson()" id="modal-save-person-btn" style="display: none;">Guardar Cambios</button>
@@ -449,8 +449,7 @@
       taskItem.innerHTML = `
         <span>${task.text}</span>
         <span class="assignee">${task.assignee}</span>
-        <button onclick="editTask('${task.text}', '${task.assignee}')" aria-label="Editar tarea">✏️</button>
-        <button onclick="deleteTask('${task.text}')" aria-label="Eliminar tarea">🗑️</button>
+        
       `;
       taskList.appendChild(taskItem);
     });
@@ -462,8 +461,7 @@
       personItem.classList.add('person-item');
       personItem.innerHTML = `
         <span>${person}</span>
-        <button onclick="editPerson('${person}')" aria-label="Editar persona">✏️</button>
-        <button onclick="deletePerson('${person}')" aria-label="Eliminar persona">🗑️</button>
+        
       `;
       personList.appendChild(personItem);
     });
@@ -970,7 +968,36 @@
     cancelModalEditTask();
   }
 
-  function cancelModalEditTask() {
+  
+let modalEditingUserTask = null;
+
+function editModalUserTask(taskText) {
+  modalEditingUserTask = taskText;
+  document.getElementById('modal-new-task').value = taskText;
+  document.getElementById('modal-save-task-btn').style.display = 'inline-block';
+  document.getElementById('modal-cancel-task-btn').style.display = 'inline-block';
+  document.querySelector('.modal-section .add-form button[onclick="addModalTask()"]')?.style?.setProperty('display', 'none');
+}
+
+function saveModalEditedUserTask() {
+  const taskInput = document.getElementById('modal-new-task');
+  const assigneeSelect = document.getElementById('modal-task-assignee');
+  const newText = taskInput.value.trim();
+  const newAssignee = assigneeSelect.value;
+
+  if (!newText || !newAssignee) {
+    alert('Por favor, completa la tarea y selecciona una persona.');
+    return;
+  }
+
+  modalTasks = modalTasks.map(t =>
+    t.text === modalEditingUserTask ? { ...t, text: newText, assignee: newAssignee } : t
+  );
+  loadModalData();
+  cancelModalEditTask();
+}
+
+function cancelModalEditTask() {
     modalEditingTask = null;
     const taskInput = document.getElementById('modal-new-task');
     const assigneeSelect = document.getElementById('modal-task-assignee');
@@ -1100,19 +1127,32 @@
   }
 
   function createHouse() {
-    modalMode = 'create';
-    editingHouseName = '';
-    modalTasks = [];
-    modalPeople = ['Tú'];
-    document.getElementById('modal-title').textContent = 'Crear Casa';
-    document.getElementById('modal-house-name').value = '';
-    document.getElementById('modal-delete-btn').style.display = 'none';
-    loadModalData();
-    document.getElementById('house-modal-overlay').classList.add('active');
-    document.getElementById('modal-house-name').focus();
-  }
+  modalMode = 'create';
+  editingHouseName = '';
+  modalPeople = ['Tú'];
+  modalTasks = [
+    { text: "Limpiar cocina", assignee: "Tú", completed: false, deadline: '', flagged: false },
+    { text: "Sacar la basura", assignee: "Tú", completed: false, deadline: '', flagged: false },
+    { text: "Lavar los platos", assignee: "Tú", completed: false, deadline: '', flagged: false }
+  ];
+  alert("Se han precargado tareas típicas para ayudarte. Puedes editarlas o eliminarlas si lo deseas.");
+
+  // Mostrar formularios para tareas y personas (como en editar casa)
+  document.querySelector('#modal-task-list + .add-form').style.display = 'flex';
+  document.querySelector('#modal-person-list + .add-form').style.display = 'flex';
+
+  document.getElementById('modal-title').textContent = 'Crear Casa';
+  document.getElementById('modal-house-name').value = '';
+  document.getElementById('modal-delete-btn').style.display = 'none';
+  loadModalData();
+  document.getElementById('house-modal-overlay').classList.add('active');
+  document.getElementById('modal-house-name').focus();
+}
 
   function editHouse(button) {
+  document.querySelector('#modal-task-list + .add-form').style.display = 'flex';
+  document.querySelector('#modal-person-list + .add-form').style.display = 'flex';
+
     modalMode = 'edit';
     const houseItem = button.closest('.house-item');
     editingHouseName = houseItem.getAttribute('data-house');

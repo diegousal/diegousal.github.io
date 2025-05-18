@@ -196,7 +196,7 @@
     .house-item button {
       background: none;
       border: none;
-      color: #ffffff;
+      color: #7ff2ec;
       font-size: 0.9rem;
       margin-left: 0.5rem;
       cursor: pointer;
@@ -204,7 +204,7 @@
     }
 
     .house-item.active button {
-      color: #000000;
+      color: red;
     }
 
     .house-item button:hover {
@@ -821,3 +821,67 @@
         font-size: 0.8rem;
       }
     }
+
+
+.house-item button {
+  background-color: #7ff2ec;
+  color: #000;
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  font-weight: bold;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.house-item button:hover {
+  background-color: #5ab8b2;
+  transform: scale(1.1);
+  border-color: #344f59;
+}
+
+
+.house-item.active {
+  background: #ffffff;
+  color: #344f59;
+}
+
+.house-item.active button {
+  background-color: #344f59;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.house-item.active button:hover {
+  background-color: #5a7d8c;
+  color: #ffffff;
+}
+
+
+/* Ventanas modales adaptables */
+.house-modal,
+.task-delete-modal,
+.task-proof-modal,
+.punishment-proof-modal {
+  width: 90vw;
+  max-width: 800px;
+  height: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Ajustes generales para pantallas pequeñas */
+@media (max-width: 768px) {
+  .house-modal,
+  .task-delete-modal,
+  .task-proof-modal,
+  .punishment-proof-modal {
+    padding: 1rem;
+    width: 95vw;
+    max-height: 95vh;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
